@@ -13,6 +13,7 @@ Steven Kazavchinski
 #include <sys/stat.h>
 #include <limits.h>
 #include <string.h>
+#include <ctype.h>
 int main(int argc, char * argv[])
 {
 	char * buffer;   // for storing message contents from file  
@@ -36,6 +37,8 @@ int main(int argc, char * argv[])
 	}
 	
 	
+	
+	makeLink(nodeNumber);
         // read file 
 	readFile(fileName,buffer); 
         	
@@ -46,7 +49,29 @@ int main(int argc, char * argv[])
 /* This function reads a file and copies its contents
    into a buffer string 
 */ 
-
+// this function creates a named pipe, depending on which node is needed 
+int makeLink(int nodeNumber)
+{
+	char pipeName[5];
+	int res; // holding the result of opening/reading/writing to a pipe
+	itoa(nodeNumber,pipeName,5);
+	/* Attempting to create the pipe */ 
+	if (mkfifo(pipeName,0777))
+	{
+		perror("mkfifo");
+		exit(1);
+	}
+	
+	// lets try opening the pipe and writing to it here 
+	
+	res = open(pipeName,O_WRONLY);
+	
+	res = write(res,"Link 1 coming in!",50);
+	
+	
+	
+	
+}
 int readFile(char * fileName, char * buffer)
 {
 	FILE * fp; 
