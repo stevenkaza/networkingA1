@@ -14,6 +14,11 @@ Steven Kazavchinski
 #include <limits.h>
 #include <string.h>
 #include <ctype.h>
+
+// function to convert integer to string 
+void itochar(int x, char *buffer, int radix);
+char *strrev(char *str);
+
 int main(int argc, char * argv[])
 {
 	char * buffer;   // for storing message contents from file  
@@ -52,9 +57,9 @@ int main(int argc, char * argv[])
 // this function creates a named pipe, depending on which node is needed 
 int makeLink(int nodeNumber)
 {
-	char pipeName[5];
+	char pipeName[10];
 	int res; // holding the result of opening/reading/writing to a pipe
-	itoa(nodeNumber,pipeName,5);
+	itochar(nodeNumber,pipeName,10);
 	/* Attempting to create the pipe */ 
 	if (mkfifo(pipeName,0777))
 	{
@@ -89,4 +94,32 @@ int readFile(char * fileName, char * buffer)
 	
 
 
+}
+
+void itochar(int x, char *buffer, int radix)
+{
+    int i = 0 , n,s;
+    n = s;
+    while (n > 0)
+    {
+        s = n%radix;
+        n = n/radix;
+        buffer[i++] = '0' + s;
+    }
+    buffer[i] = '\0';
+    strrev(buffer);
+}
+char *strrev(char *str)
+{
+      char *p1, *p2;
+
+      if (! str || ! *str)
+            return str;
+      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
+      {
+            *p1 ^= *p2;
+            *p2 ^= *p1;
+            *p1 ^= *p2;
+      }
+      return str;
 }
