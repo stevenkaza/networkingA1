@@ -1,12 +1,12 @@
 compileAll: n2
-	gcc n1.c
+	gcc n1.c -o node1
 n2:
-	gcc n2.c
+	gcc n2.c -o node2
 
-n3:	
+n3:
 	gcc n3.c
 
-n4:	
+n4:
 	gcc n4.c
 
 n5:

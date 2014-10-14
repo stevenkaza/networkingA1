@@ -1,9 +1,9 @@
-/* 
+/*
 cis 3210 A1
 0761977
 Steven Kazavchinski
 
-*/ 
+*/
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -15,60 +15,59 @@ Steven Kazavchinski
 #include <string.h>
 #include <ctype.h>
 
-// function to convert integer to string 
+// function to convert integer to string
 void itochar(int x, char *buffer, int radix);
 char *strrev(char *str);
 
 int main(int argc, char * argv[])
 {
-	char * buffer;   // for storing message contents from file  
-	char * nodeNumber = NULL; 
-	char * fileName = NULL; 
-	if (argv[1] != NULL)	
+	char * buffer;   // for storing message contents from file
+	char * nodeNumber = NULL;
+	char * fileName = NULL;
+	if (argv[1] != NULL)
 	{
 		fileName = malloc(sizeof(char)*strlen(argv[1]+1));
-		strcpy(fileName,argv[1]); 
+		strcpy(fileName,argv[1]);
 	}
 	else
 	{
-		fprintf(stdout,"%s","You must specifcy a file name\n");	
+		fprintf(stdout,"%s","You must specifcy a file name\n");
 	}
 
 	if (argv[2]!=NULL)
 	{
 
-		nodeNumber = malloc(sizeof(char)*strlen(argv[2]+1)); 
+		nodeNumber = malloc(sizeof(char)*strlen(argv[2]+1));
 		strcpy(nodeNumber,argv[2]);
 	}
 	
 	
 	
 	makeLink(nodeNumber);
-        // read file 
-	readFile(fileName,buffer); 
+        // read file
+	readFile(fileName,buffer);
         	
-	// init pipe 
+	// init pipe
 }
 
 
 /* This function reads a file and copies its contents
-   into a buffer string 
-*/ 
-// this function creates a named pipe, depending on which node is needed 
-int makeLink(int nodeNumber)
+   into a buffer string
+*/
+// this function creates a named pipe, depending on which node is needed
+int makeLink(char pipeName[5])
 {
-	char pipeName[10];
 	int res; // holding the result of opening/reading/writing to a pipe
-	itochar(nodeNumber,pipeName,10);
-	/* Attempting to create the pipe */ 
+//	itochar(nodeNumber,pipeName,10);
+	/* Attempting to create the pipe */
 	if (mkfifo(pipeName,0777))
 	{
 		perror("mkfifo");
 		exit(1);
 	}
 	
-	// lets try opening the pipe and writing to it here 
-	
+	// lets try opening the pipe and writing to it here
+  printf("Pipe name = %s\n",pipeName);
 	res = open(pipeName,O_WRONLY);
 	
 	res = write(res,"Link 1 coming in!",50);
@@ -79,17 +78,17 @@ int makeLink(int nodeNumber)
 }
 int readFile(char * fileName, char * buffer)
 {
-	FILE * fp; 
+	FILE * fp;
         char c;
 
-	fp = fopen(fileName,"r");  
+	fp = fopen(fileName,"r");
 	if (fp==NULL)
-		return 0; 
+		return 0;
 	while(!feof(fp))
 	{
 		c = fgetc(fp);
-		if (c!=EOF) 		
-		    printf("%c",c); 
+		if (c!=EOF)
+		    printf("%c",c);
 	}
 	
 
