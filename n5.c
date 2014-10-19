@@ -19,14 +19,14 @@ int main(int argc, char * argv[])
 	
 	
         // read file 
-    readPipe4();
+    readPipe5();
 
 	// init pipe 
 }
 
 
 
-int readPipe4(void)
+int readPipe5(void)
 {
     int res; 
     char message[50];
