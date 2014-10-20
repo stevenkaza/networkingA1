@@ -20,6 +20,7 @@ int main(int argc, char * argv[])
 	
         // read file 
     readPipe4();
+    return 0;
 
 	// init pipe 
 }

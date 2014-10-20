@@ -4,6 +4,8 @@ cis 3210 A1
 Steven Kazavchinski
 
 */
+#include <time.h>
+#include <stdlib.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -18,34 +20,18 @@ Steven Kazavchinski
 // function to convert integer to string
 void itochar(int x, char *buffer, int radix);
 char *strrev(char *str);
-
+int sendMsg(char * fileName,char * nodeNumber);
 int main(int argc, char * argv[])
 {
-	char * buffer;   // for storing message contents from file
 	char * nodeNumber = NULL;
 	char * fileName = NULL;
-	if (argv[1] != NULL)
-	{
-		fileName = malloc(sizeof(char)*strlen(argv[1]+1));
-		strcpy(fileName,argv[1]);
-	}
-	else
-	{
-		fprintf(stdout,"%s","You must specifcy a file name\n");
-	}
-
-	if (argv[2]!=NULL)
-	{
-
-		nodeNumber = malloc(sizeof(char)*strlen(argv[2]+1));
-		strcpy(nodeNumber,argv[2]);
-	}
+	printf("Please Enter a file name, and node number seperated by a space \n");
+	scanf("%s %s",fileName,nodeNumber);
 	
 	
-	
-	makeLink(nodeNumber);
+	makeLink(fileName,nodeNumber);
         // read file
-	readFile(fileName,buffer);
+//	readFile(nodeNumber);
         	
 	// init pipe
 }
@@ -55,7 +41,7 @@ int main(int argc, char * argv[])
    into a buffer string
 */
 // this function creates a named pipe, depending on which node is needed
-int makeLink(char pipeName[5])
+int makeLink(char * fileName,char pipeName[5])
 {
 	int res; // holding the result of opening/reading/writing to a pipe
 //	itochar(nodeNumber,pipeName,10);
@@ -67,28 +53,44 @@ int makeLink(char pipeName[5])
 	}
 	
 	// lets try opening the pipe and writing to it here
-  printf("Pipe name = %s\n",pipeName);
-	res = open(pipeName,O_WRONLY);
-	
-	res = write(res,"Link 1 coming in!",50);
-	
+    printf("Pipe name = %s\n",pipeName);
+
+	sendMsg(fileName, pipeName);
 	
 	
 	
 }
-int readFile(char * fileName, char * buffer)
-{
-	FILE * fp;
-        char c;
+/* function  opens a pipe, reads a file and sends each char at a time */ 
 
+int sendMsg(char * fileName,char * nodeNumber)
+{
+	int res;
+	res = open(nodeNumber,O_WRONLY);
+	FILE * fp;
+    int c;
+    char CHAR; 
+    char * packet; 
+    int size; 
+    packet = malloc(sizeof(char)*5);
+	int n;
 	fp = fopen(fileName,"r");
 	if (fp==NULL)
 		return 0;
 	while(!feof(fp))
 	{
-		c = fgetc(fp);
+		char(c) = fgetc(fp);
 		if (c!=EOF)
-		    printf("%c",c);
+	    {
+	    	CHAR = (char)(((int)'0')+c);
+
+	        strcpy(packet,CHAR);
+	    	// send the node number with the char
+	    	strcat(packet,nodeNumber);
+	        n = rand () %2000 + 1; 
+	        usleep(n);
+	        res = write(res,packet,1);
+
+	    }
 	}
 	
 

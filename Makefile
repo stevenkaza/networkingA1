@@ -15,9 +15,9 @@ n6: n7
 	gcc n6.c -o node6
 n7:
 	gcc n7.c -o node7
-run: nex2
+run:  nex2
 	./node1
-nex2: nex3
+nex2:	nex3
 	./node2
 nex3: nex4
 	./node3
