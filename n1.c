@@ -23,12 +23,12 @@ char *strrev(char *str);
 int sendMsg(char * fileName,char * nodeNumber);
 int main(int argc, char * argv[])
 {
-	char * nodeNumber = NULL;
-	char * fileName = NULL;
-	printf("Please Enter a file name, and node number seperated by a space \n");
+	char  nodeNumber[2];
+	char fileName[10];
+	printf("Please Enter a file name, and node number seperated by a space ex help.txt n2 \n");
 	scanf("%s %s",fileName,nodeNumber);
 	
-	
+        printf("file name = %s\n, node number = %s\n",fileName,nodeNumber);	
 	makeLink(fileName,nodeNumber);
         // read file
 //	readFile(nodeNumber);
@@ -46,6 +46,7 @@ int makeLink(char * fileName,char pipeName[5])
 	int res; // holding the result of opening/reading/writing to a pipe
 //	itochar(nodeNumber,pipeName,10);
 	/* Attempting to create the pipe */
+	printf("%s\n",pipeName);
 	if (mkfifo(pipeName,0777))
 	{
 		perror("mkfifo");
@@ -53,7 +54,6 @@ int makeLink(char * fileName,char pipeName[5])
 	}
 	
 	// lets try opening the pipe and writing to it here
-    printf("Pipe name = %s\n",pipeName);
 
 	sendMsg(fileName, pipeName);
 	
@@ -88,8 +88,9 @@ int sendMsg(char * fileName,char * nodeNumber)
 	        strcpy(packet,buf);
 	    	// send the node number with the char
 	    	strcat(packet,nodeNumber);
-	        n = rand () %2000 + 1; 
+	        n = rand () %200 + 1; 
 	        usleep(n);
+		printf("packet = %s\n",packet);
 	        res = write(res,packet,1);
 
 	    }

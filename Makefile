@@ -1,5 +1,5 @@
 all: n2
-	gcc n1.c -o node1
+	gcc -g  n1.c -o node1
 n2: n3
 	gcc n2.c -o node2
 n3: n4
