@@ -78,12 +78,14 @@ int sendMsg(char * fileName,char * nodeNumber)
 		return 0;
 	while(!feof(fp))
 	{
+
+                char * buf;
 		char(c) = fgetc(fp);
 		if (c!=EOF)
 	    {
-	    	CHAR = (char)(((int)'0')+c);
+                if (c >= 0) buf = (char) ((c > CHAR_MAX) ? (c - (UCHAR_MAX + 1)) : c);
 
-	        strcpy(packet,CHAR);
+	        strcpy(packet,buf);
 	    	// send the node number with the char
 	    	strcat(packet,nodeNumber);
 	        n = rand () %2000 + 1; 
